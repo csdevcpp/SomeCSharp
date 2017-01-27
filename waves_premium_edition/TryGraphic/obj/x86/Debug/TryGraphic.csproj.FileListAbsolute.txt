@@ -1,0 +1,8 @@
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\bin\Debug\TryGraphic.exe
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\bin\Debug\TryGraphic.pdb
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\obj\x86\Debug\TryGraphic.Form1.resources
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\obj\x86\Debug\TryGraphic.Form2.resources
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\obj\x86\Debug\TryGraphic.Properties.Resources.resources
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\obj\x86\Debug\TryGraphic.csproj.GenerateResource.Cache
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\obj\x86\Debug\TryGraphic.exe
+C:\Users\Wolf\Desktop\waves_premium_edition\TryGraphic\obj\x86\Debug\TryGraphic.pdb
