@@ -40,14 +40,16 @@ namespace TestTask_Sukhov
             
         }
 
-        
 
-        
+
+        //string prev_text = null;
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             progressBar1.Value = Program.progress_sort;
+            
             textBox1.Text = Program.textbox_mess;
+            //if(prev_text == null || )
             if (progressBar1.Value == 100)
             {
                 textBox1.Text = "Готово! Результат сортировки в файле result.txt";
@@ -65,6 +67,57 @@ namespace TestTask_Sukhov
         }
 
 
+        static public void Sort(Num_Str[] items)
+        {
+            if (items.Length <= 1)   
+            {       
+                return; 
+            }  
+            
+            int leftSize = items.Length / 2;  
+            int rightSize = items.Length - leftSize;  
+            Num_Str[] left = new Num_Str[leftSize];
+            Num_Str[] right = new Num_Str[rightSize]; 
+            Array.Copy(items, 0, left, 0, leftSize);
+            Array.Copy(items, leftSize, right, 0, rightSize); 
+            Sort(left); Sort(right); 
+            Merge(items, left, right);
+        }
+
+        static private void Merge(Num_Str[] items, Num_Str[] left, Num_Str[] right) 
+        {    
+            int leftIndex = 0;  
+            int rightIndex = 0; 
+            int targetIndex = 0; 
+            int remaining = left.Length + right.Length;     
+            while(remaining > 0)
+            {
+                if (leftIndex >= left.Length)
+                {
+                    items[targetIndex] = right[rightIndex++];
+                }
+                else if (rightIndex >= right.Length)
+                {
+
+                    items[targetIndex] = left[leftIndex++];
+                }
+                    else 
+                    
+                        if (left[leftIndex]<right[rightIndex])
+                        {
+                             items[targetIndex] = left[leftIndex++];
+                        }
+                        else
+                        {
+                            items[targetIndex] = right[rightIndex++];
+                        }
+ 
+                        targetIndex++;
+                        remaining--;
+    }
+}
+
+
         static void sort_divided_files()
         {
             Program.textbox_mess = "Сортируем разделенные файлы";
@@ -75,42 +128,24 @@ namespace TestTask_Sukhov
                 string[] contents = File.ReadAllLines(path);
                 // Sort the in-memory array
                 //////////////////////////////////////////////
-                //Array.Sort(contents);
+               
 
-                LinkedList<Num_Str> ns_contents = new LinkedList<Num_Str>();
-
+                //LinkedList<Num_Str> ns_contents = new LinkedList<Num_Str>();
+                Num_Str[] ns_contents = new Num_Str[contents.Length];
                 for (int i = 0; i < contents.Length; i++)
                 {
-
-                    Num_Str temp = new Num_Str(contents[i]);
-
-
-
-                    if (i == 0)
-                    {
-                        ns_contents.AddFirst(temp);
-                        continue;
-                    }
-                                       
-                    bool added = false;
-                    foreach (var s in ns_contents)
-                    {                       
-                        if (s > temp) { ns_contents.AddBefore(ns_contents.Find(s), temp); added = true; break; } //ns_contents.AddBefore();
-                       
-                    }
-                    if (!added) ns_contents.AddLast(temp);
-
-
-                }
-
-                for (int i = 0; i < contents.Length; i++)
-                {
-                    contents[i] = ns_contents.First.Value.to_str();
-                    ns_contents.RemoveFirst();                   
+                    ns_contents[i] = new Num_Str(contents[i]);
                 }
 
 
 
+                Sort(ns_contents);
+                
+
+                for (int i = 0; i < contents.Length; i++)
+                {
+                    contents[i] = ns_contents[i].to_str();
+                }
                 //////////////////////////////////////////////
                 // Create the 'sorted' filename
                 string newpath = path.Replace("split", "sorted");
@@ -120,7 +155,7 @@ namespace TestTask_Sukhov
                 File.Delete(path);
                 // Free the memory
                 contents = null;
-                ns_contents = null;
+               // ns_contents = null;
                 Program.progress_sort = 15;
                 GC.Collect();
             }
@@ -129,6 +164,7 @@ namespace TestTask_Sukhov
 
 
         long start_file_size = 0;
+
         void divide()
         {
             Program.textbox_mess = "Разделяем файлы";
@@ -151,7 +187,7 @@ namespace TestTask_Sukhov
 
                     if (sr.EndOfStream) break;
 
-                    if (read_line > 1000000)
+                    if (read_line > 100000)
                     {
                         sw.Flush();
                         sw.Close();
@@ -165,10 +201,12 @@ namespace TestTask_Sukhov
 
                 }
 
+
                 sw.Flush();
+                sw.Close();
 
                 sr.Close();
-                sw.Close();
+                
             }
 
             Program.progress_sort = 5;
@@ -199,7 +237,7 @@ namespace TestTask_Sukhov
                 while (true)
                 {
                     j++;
-                    if (j > 100000 || links[i].EndOfStream) break;
+                    if (j > 10000 || links[i].EndOfStream) break;
 
                     str_links[i].Enqueue(new Num_Str(links[i].ReadLine()));
 
@@ -228,10 +266,12 @@ namespace TestTask_Sukhov
                     if (str_links[i].Count < 1)
                     {
                         int k = 0;
+
+                       
                         if (links[i].EndOfStream) continue;
                         while (true)                                                    // подкачка
                         {
-                            if (links[i].EndOfStream || k > 100000) break;
+                            if (links[i].EndOfStream || k > 10000) break;
 
                             str_links[i].Enqueue(new Num_Str(links[i].ReadLine()));
                             k++;
@@ -279,11 +319,7 @@ namespace TestTask_Sukhov
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            //backgroundWorker1.CancelAsync();
-            //if(all_sort_files!=null)foreach (var s in all_sort_files) File.Delete(s);
-            //foreach (var s in Directory.GetFiles(Environment.CurrentDirectory, "sort*.dat")) { File.Delete(s); }
-            //foreach (var s in Directory.GetFiles(Environment.CurrentDirectory, "split*.dat")) File.Delete(s);
-       
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
